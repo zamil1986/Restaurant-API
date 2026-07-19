@@ -1,4 +1,4 @@
-# restaurat_api
+# restaurant_api
 
 To install dependencies:
 
