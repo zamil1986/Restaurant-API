@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client  "
+  provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
@@ -10,12 +10,11 @@ datasource db {
 model food_data {
   id_food   Int     @id @default(autoincrement())
   food_name String? @db.VarChar(50)
-  types     String? @db.VarChar(45)
   price     Int?
 }
 
-model member_data {
-  member_id Int     @id @default(autoincrement())
-  name      String? @db.VarChar(40)
-  age       Int?
+model drink_data {
+  id_drink   Int     @id @default(autoincrement())
+  drink_name String? @db.VarChar(50)
+  price      Int?
 }

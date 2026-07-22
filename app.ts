@@ -1,16 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
-import foodroutes from "./routes/foodroutes";
-import memberroutes from "./routes/memberroutes";
-
+import foodroutes from "./src/foods/food.controller";
 
 dotenv.config();
 
 const app: express.Application = express();
 
 app.use(express.json());
-app.use(foodroutes);
-app.use(memberroutes);
+app.use("/foods", foodroutes);
 
 //routes
 app.get("/", async (req: express.Request, res: express.Response) => {
