@@ -8,7 +8,7 @@ A RESTful API for managing restaurant menu data, built with Express, TypeScript,
 
 ## Overview
 
-Restaurant API is a backend project that provides CRUD operations for restaurant food data.
+Restaurant API is a backend project that provides CRUD operations for restaurant food and drink data.
 
 The project separates HTTP handling, business logic, and database access into different layers. This makes the code easier to understand, maintain, test, and develop further.
 
@@ -21,6 +21,9 @@ The project separates HTTP handling, business logic, and database access into di
 - Partially update food data using `PATCH`
 - Delete a food
 - Validate food names, prices, and IDs
+- Get all drinks and individual drinks by ID
+- Create, replace, partially update, and delete drinks
+- Validate drink names, prices, and IDs
 - Store data in MySQL/MariaDB using Prisma ORM
 - Modular Controller–Service–Repository architecture
 
@@ -64,12 +67,16 @@ Each layer has a different responsibility:
 
 ```text
 Restaurant-API/
-├── app.ts
 ├── prisma.config.ts
 ├── prisma/
 │   ├── db.ts
 │   └── schema.prisma
 ├── src/
+│   ├── app.ts
+│   ├── drinks/
+│   │   ├── drink.controller.ts
+│   │   ├── drink.service.ts
+│   │   └── drink.repository.ts
 │   └── foods/
 │       ├── food.controller.ts
 │       ├── food.service.ts
@@ -139,7 +146,7 @@ This command creates or updates the database tables based on the Prisma schema.
 ### 6. Run the application
 
 ```bash
-bun run app.ts
+bun run src/app.ts
 ```
 
 The server will run at:
@@ -167,6 +174,12 @@ http://localhost:3000
 | `PUT` | `/foods/:id` | Replace the food name and price |
 | `PATCH` | `/foods/:id` | Update selected food fields |
 | `DELETE` | `/foods/:id` | Delete a food |
+| `GET` | `/drinks` | Get all drinks |
+| `GET` | `/drinks/:id` | Get a drink by ID |
+| `POST` | `/drinks` | Create a new drink |
+| `PUT` | `/drinks/:id` | Replace the drink name and price |
+| `PATCH` | `/drinks/:id` | Update selected drink fields |
+| `DELETE` | `/drinks/:id` | Delete a drink |
 
 ## Request Examples
 
@@ -281,12 +294,43 @@ Update only the name:
 DELETE /foods/1
 ```
 
+### Create a drink
+
+```http
+POST /drinks
+Content-Type: application/json
+```
+
+Request body:
+
+```json
+{
+  "name": "Iced Tea",
+  "price": 10000
+}
+```
+
+Example response:
+
+```json
+{
+  "result": {
+    "id_drink": 1,
+    "drink_name": "Iced Tea",
+    "price": 10000
+  }
+}
+```
+
+The other drink operations follow the same request pattern as foods using
+`GET`, `PUT`, `PATCH`, and `DELETE` on `/drinks` or `/drinks/:id`.
+
 ## Validation Rules
 
 The application currently applies the following rules:
 
 - An ID must be a positive number.
-- A food name cannot be empty.
+- A food or drink name cannot be empty.
 - A price must be a number.
 - A price must be greater than zero.
 - `POST` requires both `name` and `price`.
@@ -311,7 +355,13 @@ Example validation error:
 | `food_name` | String | Name of the food |
 | `price` | Integer | Price of the food |
 
-The Prisma schema also contains a `drink_data` model, but drink endpoints have not been implemented yet.
+### Drink
+
+| Field | Type | Description |
+|---|---|---|
+| `id_drink` | Integer | Primary key with auto-increment |
+| `drink_name` | String | Name of the drink |
+| `price` | Integer | Price of the drink |
 
 ## Testing the API
 
@@ -328,6 +378,12 @@ Example with `curl`:
 curl http://localhost:3000/foods
 ```
 
+Get all drinks using `curl`:
+
+```bash
+curl http://localhost:3000/drinks
+```
+
 Create a food using `curl`:
 
 ```bash
@@ -336,11 +392,19 @@ curl -X POST http://localhost:3000/foods \
   -d '{"name":"Fried Rice","price":25000}'
 ```
 
+Create a drink using `curl`:
+
+```bash
+curl -X POST http://localhost:3000/drinks \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Iced Tea","price":10000}'
+```
+
 ## Roadmap
 
 Future improvements planned for this project:
 
-- [ ] Add CRUD endpoints for drinks
+- [x] Add CRUD endpoints for drinks
 - [ ] Add centralized error-handling middleware
 - [ ] Add schema-based request validation
 - [ ] Add automated unit and integration tests
