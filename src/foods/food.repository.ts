@@ -13,7 +13,7 @@ const findFoodById = async (id: number) => {
         },
     });
     return food;
-}
+};
 
 const insertFood = async (name: string, price: number) => {
     const food = await prisma.food_data.create({

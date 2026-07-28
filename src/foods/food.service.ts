@@ -7,7 +7,6 @@ const getAllFoods = async () => {
 };
 
 const getFoodById = async (id: number) => {
-
     if (isNaN(id) || id <= 0) {
         throw new Error("Invalid ID");
     }

@@ -2,17 +2,14 @@ generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
 }
-
 datasource db {
   provider = "mysql"
 }
-
 model food_data {
   id_food   Int     @id @default(autoincrement())
   food_name String? @db.VarChar(50)
   price     Int?
 }
-
 model drink_data {
   id_drink   Int     @id @default(autoincrement())
   drink_name String? @db.VarChar(50)

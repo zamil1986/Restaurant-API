@@ -14,8 +14,7 @@ foodroutes.get("/", async (req: express.Request, res: express.Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-foodroutes.get("/:id", async (req, res) => {
+foodroutes.get("/:id", async (req: express.Request, res: express.Response) => {
     try {
         const id = Number(req.params.id);
         const food = await getFoodById(id);
